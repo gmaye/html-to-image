@@ -159,7 +159,13 @@ async function getCSSRules(
               }),
           )
         }
-        console.error('Error inlining remote css file', e)
+        if (e.name === 'SecurityError') {
+          console.warn(
+            `Security restrictions prevented access to styles from ${sheet?.href}`,
+          )
+        } else {
+          console.error('Error inlining remote css file', e)
+        }
       }
     }
   })
@@ -173,7 +179,13 @@ async function getCSSRules(
             ret.push(item)
           })
         } catch (e) {
-          console.error(`Error while reading CSS rules from ${sheet.href}`, e)
+          if (e.name === 'SecurityError') {
+            console.warn(
+              `Security restrictions prevented access to styles from ${sheet?.href}`,
+            )
+          } else {
+            console.error(`Error while reading CSS rules from ${sheet.href}`, e)
+          }
         }
       }
     })
